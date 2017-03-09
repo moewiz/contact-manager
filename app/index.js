@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
 import {Actions, Router, Scene} from 'react-native-router-flux';
-import GreyScreen from './GreyScreen';
-import ScarletScreen from './ScarletScreen';
+import ContactItem from './ContactItem';
+import ContactList from './ContactList';
 
 const scenes = Actions.create(
   <Scene key="root">
     <Scene
-      key="scarlet"
-      component={ScarletScreen}
-      title="Scarlet"
+      key="contactList"
+      component={ContactList}
+      title="List"
       initial
     />
     <Scene
-      key="grey"
-      component={GreyScreen}
-      title="Grey"
+      key="contactItem"
+      component={ContactItem}
+      title="Item"
     />
   </Scene>
 );

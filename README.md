@@ -1,5 +1,5 @@
 # Contact Manager
 
-## Manage your contact, iOs app using React Native.
+iOS application manage your contact on iPhone.
 
 -- *Moewiz*
