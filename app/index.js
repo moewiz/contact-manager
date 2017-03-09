@@ -8,7 +8,7 @@ const scenes = Actions.create(
     <Scene
       key="contactList"
       component={ContactList}
-      title="List"
+      title="Contacts"
       initial
     />
     <Scene

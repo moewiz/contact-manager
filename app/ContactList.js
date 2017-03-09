@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {
   ListView,
+  View,
+  ActivityIndicator,
   StyleSheet
 } from 'react-native';
 import ContactItem from './ContactItem';
@@ -8,65 +10,53 @@ import ContactItem from './ContactItem';
 class ContactList extends Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    // $.ajax({
-    //   url: 'https://randomuser.me/api/',
-    //   dataType: 'json',
-    //   success: function (data) {
-    //     this.setState
-    //   }
-    // });
     this.state = {
-      dataSource: ds.cloneWithRows([
-        {
-          gender: 'male',
-          name: {
-            title: 'mr',
-            first: 'jack',
-            last: 'taylor'
-          },
-          picture: {
-            large: 'https://randomuser.me/api/portraits/men/13.jpg',
-            medium: 'https://randomuser.me/api/portraits/med/men/13.jpg',
-            thumbnail: 'https://randomuser.me/api/portraits/thumb/men/13.jpg'
-          }
-        },
-        {
-          gender: 'female',
-          name: {
-            title: 'ms',
-            first: 'tina',
-            last: 'jennings'
-          }, picture: {
-            large: 'https://randomuser.me/api/portraits/women/22.jpg',
-            medium: 'https://randomuser.me/api/portraits/med/women/22.jpg',
-            thumbnail: 'https://randomuser.me/api/portraits/thumb/women/22.jpg'
-          }
-        },
-        {
-          gender: 'male',
-          name: {
-            title: 'mr',
-            first: 'justin',
-            last: 'sanchez'
-          }, picture: {
-            large: 'https://randomuser.me/api/portraits/men/38.jpg',
-            medium: 'https://randomuser.me/api/portraits/med/men/38.jpg',
-            thumbnail: 'https://randomuser.me/api/portraits/thumb/men/38.jpg'
-          }
-        }
-      ])
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2
+      }),
+      loaded: false
     };
   }
 
+  fetchData() {
+    fetch('https://randomuser.me/api/?results=20')
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(data.results),
+          loaded: true
+        });
+      }).done();
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
   render() {
+    if (!this.state.loaded)
+      return this.renderLoadingView();
+
+    return this.renderListView();
+  }
+
+  renderLoadingView() {
+    return (
+      <View style={styles.containerLoading}>
+        <ActivityIndicator color="#aa00aa" />
+      </View>
+    );
+  }
+
+  renderListView() {
     return (
       <ListView
         style={styles.container}
         dataSource={this.state.dataSource}
-        renderRow={(data) => <ContactItem {...data} />
-        }
+        enableEmptySections={true}
+        renderRow={(data) => <ContactItem {...data} />}
+        renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       />
     );
   }
@@ -76,6 +66,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 60
+  },
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E'
+  },
+  loading: {
+    flex: 1,
+    width: 100,
+    height: 100
   }
 });
 
