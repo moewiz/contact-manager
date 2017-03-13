@@ -11,13 +11,12 @@ import Footer from './Footer';
 import SectionHeader from './SectionHeader';
 
 const API_URL = 'https://randomuser.me/api/?results=20';
+const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
+const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
 
 class ContactList extends Component {
   constructor(props) {
     super(props);
-
-    const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
-    const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
 
     this.state = {
       loaded: false,
